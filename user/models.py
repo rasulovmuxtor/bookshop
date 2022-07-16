@@ -19,9 +19,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = []
 
-    phone_number = models.CharField(_("phone number"), max_length=13,# noqa
-                                    validators=phone_validators, unique=True,# noqa
-                                    error_messages={"unique": _("A user with that phone number already exists.")}) # noqa
+    phone_number = models.CharField(_("phone number"), max_length=13,  # noqa
+                                    validators=phone_validators, unique=True,  # noqa
+                                    error_messages={
+                                        "unique": _("A user with that phone number already exists.")})  # noqa
 
     first_name = models.CharField(_("first name"), max_length=150, blank=True)
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
