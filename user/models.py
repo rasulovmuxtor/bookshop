@@ -4,7 +4,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from common.models import TimeStampedModel
+from config.base_models import TimeStampedModel
 
 from .manager import CustomUserManager
 

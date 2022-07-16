@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from books import models
+from product import models
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -15,17 +15,17 @@ class CategorySerializer(serializers.ModelSerializer):
         model = models.Category
 
 
-class BookListSerializer(serializers.ModelSerializer):
+class ProductListSerializer(serializers.ModelSerializer):
     author = AuthorSerializer()
 
     class Meta:
         fields = ('id', 'title', 'author', 'slug', 'image',
                   'price', 'discount_price', 'published_year',
                   'rating')
-        model = models.Book
+        model = models.Product
 
 
-class BookSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
     author = AuthorSerializer()
 
@@ -33,10 +33,10 @@ class BookSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'author', 'category', 'slug', 'image',
                   'price', 'discount_price', 'published_year',
                   'rating', 'total_in_stock', 'description')
-        model = models.Book
+        model = models.Product
 
 
-class BookRatingSerializer(serializers.ModelSerializer):
+class ProductRatingSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('id', 'book', 'rating', 'comment')
-        model = models.BookRating
+        fields = ('id', 'product', 'rating', 'comment')
+        model = models.ProductRating

@@ -5,7 +5,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from common.models import TimeStampedModel
+from config.base_models import TimeStampedModel
 
 User = get_user_model()
 year_validators = [MinValueValidator(1900), MaxValueValidator(2099)]
@@ -38,43 +38,48 @@ class Author(TimeStampedModel):
         return self.full_name
 
 
-class Book(TimeStampedModel):
-    author = models.ForeignKey(Author, models.PROTECT, 'books',
+class Product(TimeStampedModel):
+    """Book model"""
+    author = models.ForeignKey(Author, models.PROTECT, 'products',
                                verbose_name=_('author'))
-    category = models.ForeignKey(Category, models.PROTECT, 'books',
+    category = models.ForeignKey(Category, models.PROTECT, 'products',
                                  verbose_name=_('category'))
     title = models.CharField(_("title"), max_length=128)
     slug = AutoSlugField(populate_from='title', editable=True,
                          unique=True, blank=True)
     description = RichTextField(_("description"))
-    image = models.ImageField(_("image"), upload_to='books/images/')
+    image = models.ImageField(_("image"), upload_to='products/images/')
     total_in_stock = models.PositiveIntegerField(_("total in stock"),
                                                  default=0)
+    total_sold = models.PositiveIntegerField(_("total sold"),
+                                             default=0, editable=False)
     price = models.IntegerField(_("Price"))
     discount_price = models.IntegerField(_("discount price"), default=0)
 
     published_year = models.PositiveSmallIntegerField(
-        _("published year"), validators=year_validators
+        _("published year"), validators=year_validators, null=True, blank=True
     )
     rating = models.FloatField(
         _("rating"), null=True, editable=False, validators=rating_validators
     )
+    is_active = models.BooleanField(
+        help_text=_('Designates whether the client can see this product'))
 
     class Meta:
-        verbose_name = _("Book")
-        verbose_name_plural = _("Books")
+        verbose_name = _("Product")
+        verbose_name_plural = _("Products")
 
     def __str__(self):
         return self.title
 
 
-class BookRating(TimeStampedModel):
+class ProductRating(TimeStampedModel):
     user = models.ForeignKey(User, models.CASCADE, verbose_name=_("user"))
-    book = models.ForeignKey(Book, models.CASCADE, _("book"))
+    product = models.ForeignKey(Product, models.CASCADE, _("product"))
     rating = models.FloatField(_("rating"), validators=rating_validators)
     comment = models.TextField(_('comment'), blank=True)
 
     class Meta:
-        verbose_name = _("Book Rating")
-        verbose_name_plural = _("Book Rating")
-        unique_together = ['user', 'book']
+        verbose_name = _("Product Rating")
+        verbose_name_plural = _("Product Ratings")
+        unique_together = ['user', 'product']

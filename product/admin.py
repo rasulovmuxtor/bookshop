@@ -1,15 +1,15 @@
 from django.contrib import admin
 
-from books import models
+from product import models
 
 
-@admin.register(models.Book)
+@admin.register(models.Product)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'category', 'price',
                     'total_in_stock', 'modified_at')
     search_fields = ('title', 'author__full_name')
     list_filter = ('category',)
-    readonly_fields = ('rating',)
+    readonly_fields = ('rating', 'total_sold')
     autocomplete_fields = ('author', 'category')
 
     def get_queryset(self, request):
