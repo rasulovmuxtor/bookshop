@@ -160,7 +160,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "SIGNING_KEY": SECRET_KEY,
 
-    "AUTH_HEADER_TYPES": ("Token", "Bearer"),
+    "AUTH_HEADER_TYPES": ("Bearer",),
     # "USER_ID_FIELD": "id",
     # "USER_ID_CLAIM": "user_id",
 
@@ -173,8 +173,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ),
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend',
-                                "rest_framework.filters.SearchFilter"],
+    'DEFAULT_FILTER_BACKENDS': ["rest_framework.filters.SearchFilter"],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     "PAGE_SIZE": 10,
 
