@@ -152,7 +152,11 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'Bookshop api',
     'DESCRIPTION': 'Bookshop',
     'VERSION': '0.0.1',
-    'SERVE_INCLUDE_SCHEMA': False,
+    'SERVE_INCLUDE_SCHEMA': True,
+    # 'SCHEMA_PATH_PREFIX':'',
+    'CONTACT': {'name': 'Mukhtor Rasulv',
+                'email': 'rasulovoff@gmail.com',
+                'url': 'https://t.me/rasulovmuxtor'}
 }
 
 SIMPLE_JWT = {
@@ -171,7 +175,6 @@ SIMPLE_JWT = {
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
