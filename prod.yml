@@ -1,0 +1,61 @@
+version: '3'
+
+volumes:
+  postgres_data: { }
+  media: { }
+  static: { }
+  locale: { }
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    volumes:
+      - media:/app/media/
+      - static:/app/staticfiles/
+      - locale:/app/locale/
+    depends_on:
+      - postgres
+    env_file:
+      - ./.envs/.production/.django
+      - ./.envs/.production/.postgres
+    command: /start
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+
+  postgres:
+    image: postgres:14.1-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.envs/.production/.postgres
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+
+  nginx:
+    image: nginx:1.15-alpine
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - media:/app/media/
+      - static:/app/staticfiles/
+      - ./compose/production/nginx/:/etc/nginx/conf.d/
+    depends_on:
+      - django
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
