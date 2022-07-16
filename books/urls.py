@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from books import views
 
 urlpatterns = [
     path('categories/', views.CategoryListAPIView.as_view(),

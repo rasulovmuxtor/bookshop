@@ -2,7 +2,7 @@ from django.db.models import Avg
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
-from products.models import BookRating
+from books.models import BookRating
 
 
 @receiver(post_save, sender=BookRating)

@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
     # apps
     'user.apps.UserConfig',
-    'products.apps.ProductsConfig',
+    'books.apps.BooksConfig',
 ]
 
 MIDDLEWARE = [
