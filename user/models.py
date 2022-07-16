@@ -1,10 +1,12 @@
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import RegexValidator
 from django.db import models
-from .manager import CustomUserManager
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.utils.translation import gettext_lazy as _
+
 from common.models import TimeStampedModel
+
+from .manager import CustomUserManager
 
 phone_validators = [RegexValidator(
     regex=r"^\+{1}998\d{9}$",
@@ -17,7 +19,6 @@ phone_validators = [RegexValidator(
 class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = []
 
     phone_number = models.CharField(_("phone number"), max_length=13,  # noqa
                                     validators=phone_validators, unique=True,  # noqa

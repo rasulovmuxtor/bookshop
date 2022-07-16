@@ -1,9 +1,9 @@
 exclude: 'docs|node_modules|migrations|config|.git|.tox'
-default_stages: [commit]
+default_stages: [ commit ]
 fail_fast: true
 
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
     hooks:
       - id: check-merge-conflict
@@ -17,26 +17,26 @@ repos:
       - id: pretty-format-json
         files: (^|/)a/.+\.(py|html|sh|css|js|json)$
 
--   repo: https://github.com/psf/black
-    rev: 20.8b1
+  - repo: https://github.com/pycqa/flake8
+    rev: main
     hooks:
-    -   id: black
-        args: [--config=pyproject.toml]
+    -   id: flake8
+        args: [ --config=pyproject.toml ]
 
--   repo: https://github.com/hadialqattan/pycln
-    rev: v0.0.1-beta.3
+  - repo: https://github.com/hadialqattan/pycln
+    rev: v2.0.2
     hooks:
-    -   id: pycln
-        args: [--config=pyproject.toml]
+      - id: pycln
+        args: [ --config=pyproject.toml ]
 
--   repo: https://github.com/pycqa/isort
-    rev: 5.5.4
+  - repo: https://github.com/pycqa/isort
+    rev: 5.10.1
     hooks:
-    -   id: isort
+      - id: isort
         files: "\\.(py)$"
-        args: [--settings-path=pyproject.toml]
+        args: [ --settings-path=pyproject.toml ]
 
--   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.812
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.961
     hooks:
-    -   id: mypy
+      - id: mypy
