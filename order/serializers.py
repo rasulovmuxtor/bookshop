@@ -57,7 +57,9 @@ class OrderSerializer(serializers.ModelSerializer):
                     )
 
                     product.total_in_stock -= cart_product.quantity
-                    product.save(update_fields=['total_in_stock'])
+                    product.total_sold += cart_product.quantity
+                    product.save(
+                        update_fields=['total_in_stock', 'total_sold'])
 
                     order_products.append(order_product)
                     instance.total_price += order_product.total_price

@@ -1,6 +1,7 @@
 from autoslug import AutoSlugField
 from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
+from django.core.validators import ValidationError  # noqa
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -50,7 +51,7 @@ class Product(TimeStampedModel):
     description = RichTextField(_("description"))
     image = models.ImageField(_("image"), upload_to='products/images/')
     total_in_stock = models.PositiveIntegerField(_("total in stock"),
-                                                 default=0)
+                                                 default=0, editable=False)
     total_sold = models.PositiveIntegerField(_("total sold"),
                                              default=0, editable=False)
     price = models.IntegerField(_("Price"))
@@ -71,6 +72,25 @@ class Product(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+
+class ProductEntry(TimeStampedModel):
+    user = models.ForeignKey(User, models.PROTECT, null=True, editable=False)
+    product = models.ForeignKey(Product, models.CASCADE)
+    comment = models.TextField(blank=True)
+    quantity = models.IntegerField(_("Quantity"))
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = _("Product Entry")
+        verbose_name_plural = _("Product Entry")
+
+    def clean(self):
+        if self.quantity == 0:
+            raise ValidationError({'quantity': _("this field can not be 0")})
+
+    def __str__(self):
+        return str(self.quantity)
 
 
 class ProductRating(TimeStampedModel):

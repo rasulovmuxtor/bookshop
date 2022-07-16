@@ -21,9 +21,11 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     USERNAME_FIELD = 'phone_number'
 
     phone_number = models.CharField(_("phone number"), max_length=13,  # noqa
-                                    validators=phone_validators, unique=True,  # noqa
+                                    validators=phone_validators, unique=True,
+                                    # noqa
                                     error_messages={
-                                        "unique": _("A user with that phone number already exists.")})  # noqa
+                                        "unique": _(
+                                            "A user with that phone number already exists.")})  # noqa
 
     first_name = models.CharField(_("first name"), max_length=150, blank=True)
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
@@ -59,6 +61,9 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         """
         full_name = "%s %s" % (self.first_name, self.last_name)
         return full_name.strip()
+
+    def __str__(self):
+        return self.get_full_name()
 
 
 class SMSVerification(TimeStampedModel):
