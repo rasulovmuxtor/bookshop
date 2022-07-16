@@ -20,3 +20,9 @@ class CustomUserManager(UserManager):
         user.password = make_password(password)
         user.save(using=self._db)
         return user
+
+    def create_user(self, phone_number, email=None, password=None, **kwargs):  # noqa
+        return super(CustomUserManager, self).create_user(phone_number, email, password, **kwargs)  # noqa
+
+    def create_superuser(self, phone_number, email=None, password=None, **kwargs):  # noqa
+        return super(CustomUserManager, self).create_superuser(phone_number, email, password, **kwargs)  # noqa
