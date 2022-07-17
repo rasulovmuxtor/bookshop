@@ -7,6 +7,8 @@ urlpatterns = [
          name='category-list'),
     path('authors/', views.AuthorListAPIView.as_view(), name='category-list'),
     path('rate/', views.ProductRatingCreateAPIView.as_view(), name='rate'),
+    path('recommended/', views.RecommendedProductListAPIView.as_view(),
+         name='recommended-list'),
     path('', views.ProductListAPIView.as_view(), name='product-list'),
     path('<str:slug>/', views.ProductRetrieveAPIView.as_view(),
          name='product-retrieve'),
