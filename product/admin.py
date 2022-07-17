@@ -16,7 +16,7 @@ class ProductEntryInline(TabularInlinePaginated):
 
 
 @admin.register(models.Product)
-class BookAdmin(admin.ModelAdmin):
+class ProductAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'category', 'price',
                     'total_in_stock', 'modified_at')
     search_fields = ('title', 'author__full_name')

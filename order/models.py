@@ -104,14 +104,15 @@ class OrderProduct(TimeStampedModel):
 
 class ReportType(models.TextChoices):
     weekly_order_product = 'weekly_order_product', _("weekly order product")
+    custom = 'custom', _("custom")
 
 
 class Report(TimeStampedModel):
+    title = models.CharField(max_length=64)
     type = models.CharField(max_length=32, choices=ReportType.choices)
-    date = models.DateField()
     document = models.FileField()
 
     class Meta:
-        ordering = ['-date']
+        ordering = ['-created_at']
         verbose_name = _("Report")
         verbose_name_plural = _("Reports")

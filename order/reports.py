@@ -1,5 +1,4 @@
 import os
-from datetime import timedelta
 
 from django.conf import settings
 from django.db.models import Sum
@@ -9,11 +8,15 @@ from order.models import OrderProduct, OrderProductStatus, Report, ReportType
 from order.workbooks import BaseWorkbook
 
 
-def weekly_order_product_report(date):
-    last_week = date - timedelta(days=6)
+def order_product_report(from_date, end_date):
+    title = f'{from_date} : {end_date}'
+    report_type = ReportType.weekly_order_product
+
+    instance = Report(title=title, type=report_type)
+
     queryset = OrderProduct.objects.filter(
         status=OrderProductStatus.verified,
-        created_at__date__gte=last_week, created_at__date__lte=date,
+        created_at__date__gte=from_date, created_at__date__lte=end_date,
         order__status=OrderStatus.verified
     )
     queryset = queryset.values('product_id').annotate(total=Sum('quantity'))
@@ -21,7 +24,7 @@ def weekly_order_product_report(date):
                                                            'total')
     if not queryset:
         return None
-    title = f'{last_week}-{date}'
+
     wb = BaseWorkbook()
     sheet = wb.add_sheet('report')
     sheet.col(0).width = wb.short_width
@@ -47,7 +50,7 @@ def weekly_order_product_report(date):
         os.makedirs(directory)
     filepath = os.path.join(directory, filename)
     wb.save(filepath)
-    instance = Report(date=date, type=ReportType.weekly_order_product)
+
     instance.document.name = f"reports/weekly/{filename}"
     instance.save()
     return instance

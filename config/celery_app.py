@@ -19,7 +19,7 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     # Executes every Sunday 23:59.
     'mail-weekly-report-every-sunday': {
-        'task': 'order.tasks.mail_weekly_report',
-        'schedule': crontab(hour=23, minute=59, day_of_week='sun'),
+        'task': 'order.tasks.order_product_report_task',
+        'schedule': crontab(hour=16, minute=3, day_of_week='sun'),
     },
 }
