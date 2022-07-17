@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from config.base_models import TimeStampedModel
-from product.managers import ProductDiscountQuerySet
+from product.managers import ProductDiscountQuerySet, ProductQuerySet
 
 User = get_user_model()
 year_validators = [MinValueValidator(1900), MaxValueValidator(2099)]
@@ -43,6 +43,7 @@ class Author(TimeStampedModel):
 
 class Product(TimeStampedModel):
     """Book model"""
+    objects = ProductQuerySet.as_manager()
     author = models.ForeignKey(Author, models.PROTECT, 'products',
                                verbose_name=_('author'))
     category = models.ForeignKey(Category, models.PROTECT, 'products',

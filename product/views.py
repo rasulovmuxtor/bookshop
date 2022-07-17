@@ -8,7 +8,7 @@ from product import models, serializers
 
 
 class ProductListAPIView(ListAPIView):
-    queryset = models.Product.objects.filter(is_active=True)
+    queryset = models.Product.objects.active()
     serializer_class = serializers.ProductListSerializer
     search_fields = ('title', 'author__full_name', 'category__title')
     filterset_fields = ('author_id', 'category_id', 'category__slug')
@@ -34,7 +34,7 @@ class RecommendedProductListAPIView(ProductListAPIView):
 
 
 class ProductRetrieveAPIView(RetrieveAPIView):
-    queryset = models.Product.objects.filter(is_active=True)
+    queryset = models.Product.objects.active()
     serializer_class = serializers.ProductSerializer
     lookup_field = 'slug'
 
