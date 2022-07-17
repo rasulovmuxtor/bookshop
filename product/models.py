@@ -118,6 +118,7 @@ class ProductDiscount(TimeStampedModel):
                                            MaxValueValidator(100)])
 
     class Meta:
+        ordering = ['-start_at', '-end_at']
         verbose_name = _('Product discount')
         verbose_name_plural = _('Product discounts')
 
