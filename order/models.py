@@ -91,6 +91,27 @@ class OrderProduct(TimeStampedModel):
                               choices=OrderProductStatus.choices,
                               default=OrderProductStatus.verifying)
 
+    class Meta:
+        ordering = ['order']
+        unique_together = ['order', 'product']
+        verbose_name = _("Order Product")
+        verbose_name_plural = _("Order Products")
+
     @property
     def total_price(self):
         return self.price * self.quantity
+
+
+class ReportType(models.TextChoices):
+    weekly_order_product = 'weekly_order_product', _("weekly order product")
+
+
+class Report(TimeStampedModel):
+    type = models.CharField(max_length=32, choices=ReportType.choices)
+    date = models.DateField()
+    document = models.FileField()
+
+    class Meta:
+        ordering = ['-date']
+        verbose_name = _("Report")
+        verbose_name_plural = _("Reports")

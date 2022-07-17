@@ -7,7 +7,7 @@ volumes:
   locale: { }
 
 services:
-  django:
+  django: &django
     build:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
@@ -17,6 +17,7 @@ services:
       - locale:/app/locale/
     depends_on:
       - postgres
+      - redis
     env_file:
       - ./.envs/.production/.django
       - ./.envs/.production/.postgres
@@ -59,3 +60,24 @@ services:
         max-size: "100m"
         max-file: "10"
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  redis:
+    image: redis:5.0
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+
+  celeryworker:
+    <<: *django
+    image: celeryworker
+    command: /start-celeryworker
+    restart: always
+
+  celerybeat:
+    <<: *django
+    image: celerybeat
+    command: /start-celerybeat
+    restart: always

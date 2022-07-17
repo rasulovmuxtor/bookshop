@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'ckeditor',
     'drf_spectacular',
-
+    "django_celery_beat",
     # apps
     'user.apps.UserConfig',
     'product.apps.ProductConfig',
@@ -120,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 
@@ -200,6 +200,13 @@ REST_FRAMEWORK = {
 
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+# Celery
+if USE_TZ:
+    CELERY_TIMEZONE = TIME_ZONE
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", 'redis://127.0.0.1:6379/0')
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 CORS_ALLOW_ALL_ORIGINS = True  # noqa If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
 CORS_ALLOW_CREDENTIALS = True
