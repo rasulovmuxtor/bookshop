@@ -5,3 +5,10 @@ SECRET_KEY=django-insecure-qitr6tnh2z3euo03*l7hd6$1awr01p=h9xr$i$-ktmo3r)qo-u
 
 REDIS_URL=redis://redis:6379/0
 CELERY_BROKER=redis://redis:6379/0
+
+
+EMAIL_HOST = ''
+EMAIT_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = ''

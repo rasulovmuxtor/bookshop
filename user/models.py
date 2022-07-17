@@ -62,6 +62,13 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         full_name = "%s %s" % (self.first_name, self.last_name)
         return full_name.strip()
 
+    @staticmethod
+    def get_admin_email_list():
+        admins = User.objects.filter(is_staff=True, is_active=True)
+        admins = admins.exclude(email__exact='').order_by('email')
+        emails = list(admins.distinct('email').values_list('email', flat=True))
+        return emails
+
     def __str__(self):
         return self.get_full_name()
 

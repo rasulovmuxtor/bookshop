@@ -10,8 +10,11 @@ from order.workbooks import BaseWorkbook
 
 def order_product_report(from_date, end_date):
     title = f'{from_date} : {end_date}'
-    report_type = ReportType.weekly_order_product
-
+    diff_date = end_date - from_date
+    if diff_date.days == 7:
+        report_type = ReportType.weekly_order_product
+    else:
+        report_type = ReportType.custom
     instance = Report(title=title, type=report_type)
 
     queryset = OrderProduct.objects.filter(

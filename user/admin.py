@@ -40,3 +40,4 @@ class CustomUserAdmin(UserAdmin):
     list_filter = ("is_staff", "is_superuser", "is_active", "groups")
     search_fields = ("phone_number", "first_name", "last_name", "email")
     ordering = ("first_name",)
+    readonly_fields = ("created_at", 'modified_at')
