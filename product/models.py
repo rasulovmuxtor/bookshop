@@ -4,9 +4,11 @@ from django.contrib.auth import get_user_model
 from django.core.validators import ValidationError  # noqa
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from config.base_models import TimeStampedModel
+from product.managers import ProductDiscountQuerySet
 
 User = get_user_model()
 year_validators = [MinValueValidator(1900), MaxValueValidator(2099)]
@@ -103,3 +105,32 @@ class ProductRating(TimeStampedModel):
         verbose_name = _("Product Rating")
         verbose_name_plural = _("Product Ratings")
         unique_together = ['user', 'product']
+
+
+class ProductDiscount(TimeStampedModel):
+    objects = ProductDiscountQuerySet.as_manager()
+
+    title = models.CharField(max_length=255)
+    products = models.ManyToManyField(Product)
+    start_at = models.DateTimeField(default=timezone.now)
+    end_at = models.DateTimeField()
+    rate = models.IntegerField(validators=[MinValueValidator(1),
+                                           MaxValueValidator(100)])
+
+    class Meta:
+        verbose_name = _('Product discount')
+        verbose_name_plural = _('Product discounts')
+
+    def clean(self):
+        if self.start_at >= self.end_at:
+            raise ValidationError(
+                {'start_at': _(
+                    "The start time must be less than the end time")})
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def is_active_now(self):
+        now = timezone.now()
+        return self.start_at <= now and self.end_at > now

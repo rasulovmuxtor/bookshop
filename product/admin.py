@@ -46,3 +46,13 @@ class CategoryAdmin(admin.ModelAdmin):
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'modified_at')
     search_fields = ('full_name',)
+
+
+@admin.register(models.ProductDiscount)
+class ProductDiscountAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'start_at', 'end_at')
+    search_fields = ('title',)
+    autocomplete_fields = ('products',)
+
+    def has_delete_permission(self, request, obj=None):
+        return False
