@@ -28,16 +28,17 @@ def order_product_report_task(from_date=None, end_date=None, send_mail=True):
         emails = User.get_admin_email_list()
         if not emails:
             return
+
+        link = f'{settings.HOST}{instance.document.url}'
+        body = "<b>Report {}.<b> <br> <a href={}>Download</a>".format(
+            instance.title,
+            link
+        )
+        message = EmailMultiAlternatives('Report')
+        message.to = emails
+        message.alternatives = ((body, 'text/html'),)
+        message.attach_file(path=instance.document.path)
         try:
-            link = f'{settings.HOST}{instance.document.url}'
-            body = "<b>Report {}.<b> <br> <a href={}>Download</a>".format(
-                instance.title,
-                link
-            )
-            message = EmailMultiAlternatives('Report')
-            message.to = emails
-            message.alternatives = ((body, 'text/html'),)
-            message.attach_file(path=instance.document.path)
             message.send()
         except Exception as e:
             print(e)
